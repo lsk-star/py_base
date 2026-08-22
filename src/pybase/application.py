@@ -62,5 +62,5 @@ def create_application(settings: Settings | None = None) -> FastAPI:
 
     # 探针不属于业务 API，因此固定在根路径，不放入版本化路由。
     app.include_router(health_router)
-    app.include_router(build_api_router(), prefix=settings.app.api_prefix)
+    app.include_router(build_api_router(settings), prefix=settings.app.api_prefix)
     return app

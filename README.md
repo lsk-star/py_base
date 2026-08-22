@@ -161,3 +161,27 @@ uv run alembic upgrade head
 ```powershell
 uv run python -m unittest discover -s tests -v
 ```
+
+## 模块生成
+
+生成通用业务模块骨架：
+
+```powershell
+uv run pybase generate module user
+```
+
+生成带数据库模型、通用仓储和请求级 Service 依赖的模块：
+
+```powershell
+uv run pybase generate module user --with-model
+```
+
+默认路由前缀和表名均使用模块名原样。可通过 `--route-prefix`、`--table-name` 覆盖；使用
+`--dry-run` 仅查看文件变更。生成器不会猜测业务字段，也不会自动生成 CRUD HTTP 接口。
+
+生成器支持增量升级：先执行基础命令，后续再追加 `--with-model` 即可补齐模型、仓储、依赖注入、
+数据库路由标记和 Alembic 模型导入。重复执行同一命令不会重复注册模块或覆盖已有 Router、Schema、
+README、测试文件。若 Service 缺少生成器标记且无法确认安全升级，会拒绝覆盖；只有显式传入
+`--force` 才会覆盖 Service 文件。
+
+完整的生成文件说明、模块注册和数据库模型发现规则见 [分包指南](docs/分包指南.md)。

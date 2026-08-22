@@ -37,7 +37,7 @@ def _trace_id_from_traceparent(value: str | None) -> str | None:
     if not value:
         return None
     match = _TRACEPARENT_PATTERN.fullmatch(value)
-    if match is None or match["version"].lower() == "ff":
+    if match is None or match["version"].lower() != "00":
         return None
     if set(match["trace_id"].lower()) == {"0"} or set(match["parent_id"].lower()) == {"0"}:
         return None

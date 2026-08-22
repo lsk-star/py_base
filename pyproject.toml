@@ -34,7 +34,7 @@ database-mysql = [
 ]
 
 [project.scripts]
-pybase = "pybase.main:run"
+pybase = "pybase.cli:main"
 
 [build-system]
 requires = ["hatchling"]

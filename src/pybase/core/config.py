@@ -29,7 +29,7 @@ class TracingSettings(BaseModel):
 
 class DatabaseSettings(BaseModel):
     enabled: bool = False
-    url: str | None = None
+    url: str = "mysql+asyncmy://root:root@127.0.0.1:3306/pybase"
     strict_startup: bool = True
     echo: bool = False
     pool_size: int = Field(default=5, ge=1)

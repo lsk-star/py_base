@@ -15,7 +15,6 @@ class ModuleRegistration:
 
 MODULE_REGISTRATIONS: tuple[ModuleRegistration, ...] = (
     # pybase: generated module registrations - start
-    ModuleRegistration(name="user", router_path="pybase.modules.user.router:router", requires_database=True),
     # pybase: generated module registrations - end
 )
 

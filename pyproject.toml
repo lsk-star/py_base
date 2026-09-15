@@ -5,32 +5,11 @@ description = "A modular, extensible FastAPI backend scaffold"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "asyncmy>=0.2.10,<1.0",
     "fastapi>=0.116,<1.0",
     "pydantic-settings>=2.10,<3.0",
+    "sqlalchemy[asyncio]>=2.0.41,<3.0",
     "uvicorn[standard]>=0.35,<1.0",
-]
-
-[project.optional-dependencies]
-database = [
-    "alembic>=1.16,<2.0",
-    "sqlalchemy[asyncio]>=2.0.41,<3.0",
-]
-database-postgresql = [
-    "alembic>=1.16,<2.0",
-    "asyncpg>=0.30,<1.0",
-    "psycopg[binary]>=3.2,<4.0",
-    "sqlalchemy[asyncio]>=2.0.41,<3.0",
-]
-database-sqlite = [
-    "aiosqlite>=0.21,<1.0",
-    "alembic>=1.16,<2.0",
-    "sqlalchemy[asyncio]>=2.0.41,<3.0",
-]
-database-mysql = [
-    "alembic>=1.16,<2.0",
-    "asyncmy>=0.2.10,<1.0",
-    "pymysql>=1.1,<2.0",
-    "sqlalchemy[asyncio]>=2.0.41,<3.0",
 ]
 
 [project.scripts]

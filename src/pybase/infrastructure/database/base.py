@@ -3,7 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
-    """Alembic 自动生成迁移前，必须导入所有 SQLAlchemy 模型。"""
+    """所有 SQLAlchemy 模型的声明基类。"""
 
 
 class IntIdMixin:

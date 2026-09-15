@@ -24,7 +24,7 @@ def _build_components(settings: Settings) -> ComponentRegistry:
         from pybase.infrastructure.database.component import DatabaseComponent
     except ImportError as exc:
         raise ConfigurationError(
-            "数据库已启用，但未安装数据库依赖。请执行: uv sync --extra database"
+            "数据库已启用，但数据库依赖不可用。请执行: uv sync"
         ) from exc
 
     registry.add(DatabaseComponent(settings.database))

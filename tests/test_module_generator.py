@@ -42,7 +42,7 @@ class ModuleGeneratorTests(unittest.TestCase):
             )
             self.assertEqual(len(result.modified_files), 1)
 
-    def test_generates_database_module_and_registers_model_for_alembic(self) -> None:
+    def test_generates_database_module_and_registers_model(self) -> None:
         with self._project_root() as project_root:
             generate_module(project_root, ModuleOptions(name="user_profile", with_model=True))
 

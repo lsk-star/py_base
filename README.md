@@ -1,10 +1,10 @@
 # PyBase
 
-PyBase 是一个基于 FastAPI 的异步 Python 后端脚手架。它的最小核心只提供 Web 应用、配置、日志、统一响应、异常处理、请求链路标识和健康检查；数据库等外部能力按需安装并显式启用。
+PyBase 是一个基于 FastAPI 的异步 Python 后端脚手架。核心提供 Web 应用、配置、日志、统一响应、异常处理、请求链路标识、健康检查和 MySQL 数据库能力；数据库默认关闭，启用时才建立连接。
 
 ## 设计原则
 
-- **最小核心**：未启用的能力不连接、不初始化，也不要求安装其依赖。
+- **最小核心**：未启用的能力不连接、不初始化；数据库等内置能力随核心安装，但默认关闭。
 - **显式装配**：`src/pybase/application.py` 是唯一的应用装配点，负责配置、日志、中间件、生命周期组件和路由注册。
 - **按模块配置**：`Settings` 由 `AppSettings`、`LoggingSettings`、`DatabaseSettings` 等模块配置组成，新增能力只添加自己的配置对象。
 - **按业务拆分**：业务代码放入 `modules/<业务名>/`，其中 HTTP 路由、Schema、服务和仓储可随模块演进，不形成全局巨型 `services` 目录。
@@ -66,21 +66,15 @@ PYBASE_LOGGING__FORMAT=json
 PYBASE_DATABASE__ENABLED=false
 ```
 
-数据库默认关闭。关闭时可只安装核心依赖，应用不会导入 SQLAlchemy 或建立数据库连接。
+数据库默认关闭。未启用时不会建立连接；启用后默认使用 MySQL。
 
-## 可选数据库
+## 数据库
 
-安装数据库能力：
-
-```powershell
-uv sync --extra database-postgresql
-```
-
-在 `.env` 中启用并配置：
+项目默认使用 MySQL（`asyncmy` 异步驱动）。安装依赖后，在 `.env` 中启用并配置：
 
 ```env
 PYBASE_DATABASE__ENABLED=true
-PYBASE_DATABASE__URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/pybase
+PYBASE_DATABASE__URL=mysql+asyncmy://root:root@127.0.0.1:3306/pybase
 PYBASE_DATABASE__STRICT_STARTUP=true
 ```
 
@@ -89,23 +83,7 @@ PYBASE_DATABASE__STRICT_STARTUP=true
 - `STRICT_STARTUP=true`：无法连接数据库时拒绝启动，适合绝大多数生产服务。
 - `STRICT_STARTUP=false`：应用可启动，但 `/ready` 会报告数据库未就绪，直到依赖恢复。
 
-本地或测试场景可用 SQLite：
-
-```env
-PYBASE_DATABASE__URL=sqlite+aiosqlite:///./pybase.db
-```
-
-## 数据库迁移
-
-数据库模型继承 `pybase.infrastructure.database.base.Base`。新增模型后，在
-`src/pybase/infrastructure/database/models/__init__.py` 导入它，Alembic 才能发现元数据；然后生成迁移：
-
-```powershell
-uv run alembic revision --autogenerate -m "create users"
-uv run alembic upgrade head
-```
-
-迁移命令同样读取 `.env` 中的 `PYBASE_DATABASE__URL`。
+如需切换到其他数据库，替换 `PYBASE_DATABASE__URL` 的方言驱动即可，例如 `postgresql+asyncpg://...` 或 `sqlite+aiosqlite:///./pybase.db`，并安装对应的异步驱动。
 
 ## 健康检查
 
@@ -140,7 +118,7 @@ uv run alembic upgrade head
 
 ## 架构与启动流程
 
-分包、分层、外部基础设施接入示例、不同数据库适配方式、Alembic 迁移流程，以及从启动到关闭的完整流程，请阅读 [架构指南](docs/分包指南.md)。
+分包、分层、外部基础设施接入示例、不同数据库适配方式，以及从启动到关闭的完整流程，请阅读 [架构指南](docs/分包指南.md)。
 
 ## 扩展一个可选能力
 
@@ -180,7 +158,7 @@ uv run pybase generate module user --with-model
 `--dry-run` 仅查看文件变更。生成器不会猜测业务字段，也不会自动生成 CRUD HTTP 接口。
 
 生成器支持增量升级：先执行基础命令，后续再追加 `--with-model` 即可补齐模型、仓储、依赖注入、
-数据库路由标记和 Alembic 模型导入。重复执行同一命令不会重复注册模块或覆盖已有 Router、Schema、
+数据库路由标记和模型导入。重复执行同一命令不会重复注册模块或覆盖已有 Router、Schema、
 README、测试文件。若 Service 缺少生成器标记且无法确认安全升级，会拒绝覆盖；只有显式传入
 `--force` 才会覆盖 Service 文件。
 

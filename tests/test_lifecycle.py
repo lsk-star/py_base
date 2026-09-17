@@ -1,6 +1,6 @@
 import unittest
 
-from pybase.contracts.lifecycle import ComponentRegistry, ReadinessStatus
+from app.contracts.lifecycle import ComponentRegistry, ReadinessStatus
 
 
 class FakeComponent:

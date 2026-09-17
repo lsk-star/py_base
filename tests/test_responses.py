@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from pybase.presentation.responses import error_response, success_response
+from app.presentation.responses import error_response, success_response
 
 
 class ApiResponseTests(unittest.TestCase):

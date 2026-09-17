@@ -3,10 +3,10 @@ from http import HTTPStatus
 from types import SimpleNamespace
 import unittest
 
-from pybase.contracts.lifecycle import ReadinessStatus
-from pybase.core.errors import ErrorCode
-from pybase.modules.health.router import readiness
-from pybase.presentation.exception_handlers import error_code_for_http_status
+from app.contracts.lifecycle import ReadinessStatus
+from app.core.errors import ErrorCode
+from app.modules.health.router import readiness
+from app.presentation.exception_handlers import error_code_for_http_status
 
 
 class FakeRegistry:

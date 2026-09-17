@@ -1,7 +1,7 @@
 import unittest
 
-from pybase.presentation.middleware.access_log import _is_sensitive_query_key
-from pybase.presentation.middleware.request_context import (
+from app.presentation.middleware.access_log import _is_sensitive_query_key
+from app.presentation.middleware.request_context import (
     _safe_request_id,
     _safe_trace_id,
     _trace_id_from_traceparent,
